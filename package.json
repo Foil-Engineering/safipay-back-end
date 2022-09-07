@@ -1,0 +1,34 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "SafiPay allows remote workers to get payed in remote countries",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/Foil-Engineering/safipay-back-end.git"
+  },
+  "keywords": [
+    "safipay"
+  ],
+  "author": "Eliel Mathe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Foil-Engineering/safipay-back-end/issues"
+  },
+  "homepage": "https://github.com/Foil-Engineering/safipay-back-end#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "express-jwt": "^7.7.5",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.5",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19",
+    "uuid": "^9.0.0"
+  }
+}
