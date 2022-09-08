@@ -33,7 +33,9 @@ const userSchema = new mongoose.Schema({
     verified : {
         type : Boolean,
         default : false
-    }
+    },
+    verified_at : Date,
+    kyc_info : Map
 });
 
 const encryptPassword = (password, salt) => {

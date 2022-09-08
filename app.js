@@ -13,6 +13,7 @@ app.use(cors());
 
 const authRoutes = require("./routes/auth");
 const billRoutes = require("./routes/bill");
+const userRoutes = require("./routes/user");
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ mongoose.connection.on("error",err => {
 
 app.use(authRoutes);
 app.use(billRoutes);
+app.use(userRoutes);
+
 app.listen(port, () => {
   console.log(`Server running on ${port}!`);
 });
