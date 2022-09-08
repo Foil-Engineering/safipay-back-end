@@ -49,6 +49,7 @@ const billSchema = new mongoose.Schema({
         type : Array,
         default : []
     },
+    unique_url_param : String,
     user_id : ObjectId
 });
 

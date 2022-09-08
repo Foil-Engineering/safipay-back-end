@@ -47,3 +47,13 @@ exports.requireSignin = expressjwt({
     userProperty : "auth",
     
 });
+
+exports.requireIsEmployee = (req, res, next) => {
+    const user = req.auth && req.auth.type == "employee" ? req.auth : null;
+    if(!user){
+        return res.status(403).json({
+            error : "Access denied"
+        });
+    }
+    next();
+}
