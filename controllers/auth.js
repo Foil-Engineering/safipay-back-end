@@ -38,7 +38,15 @@ exports.signup = async (req, res, next) => {
     if(user_exists) res.status(403).json({error : "Email is taken!"});
     const user = await new User(req.body);
     await user.save();
-    res.json({user})
+    //res.json({user})
+
+    const token = jwt.sign({id : user._id},process.env.JWT_SECRET);    
+    res.cookie("t",token,{expire : new Date() + 9999});
+    const {_id, name, email} = user;
+    return res.status(200).json({
+        token : token,
+        user : {_id, email, name}
+    });
 }
 
 exports.requireSignin = expressjwt({
