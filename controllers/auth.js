@@ -24,11 +24,11 @@ exports.login = async (req, res, next) => {
         
         res.cookie("t",token,{expire : new Date() + 9999});
 
-        const {_id, name, email} = user;
+        const {_id, names, email} = user;
         
         return res.status(200).json({
             token : token,
-            user : {_id, email, name}
+            user : {_id, email, names}
         });
     });
 };
@@ -42,10 +42,10 @@ exports.signup = async (req, res, next) => {
 
     const token = jwt.sign({id : user._id},process.env.JWT_SECRET);    
     res.cookie("t",token,{expire : new Date() + 9999});
-    const {_id, name, email} = user;
+    const {_id, names, email} = user;
     return res.status(200).json({
         token : token,
-        user : {_id, email, name}
+        user : {_id, email, names}
     });
 }
 
