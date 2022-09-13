@@ -82,14 +82,18 @@ exports.get_my_bills = (req, res, next) => {
         });
 };
 
-exports.get_a_bill_by_unique_url_param = (req, res, next) => {
-    Bill.findOne({unique_url_param : req.params.url_unique_param}, (err, data) => {
+exports.get_a_bill_by_unique_url_param = async (req, res, next) => {
+    Bill.findOne({unique_url_param : req.params.url_unique_param},async (err, data) => {
         if(err || !data){
             return res.status(400).json({
                 error : "Unable to get bill",
                 id : req.params.url_unique_param
             });
         }
+        //Get user 
+        const user = await User.findOne({id : data.user_id});
+        data.user = user;
+
         res.json(data);
     });
 }
