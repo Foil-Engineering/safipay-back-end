@@ -1,4 +1,5 @@
 const Bill = require("../models/Bill");
+const User = require("../models/User");
 const uuid = require("uuid");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
@@ -18,7 +19,7 @@ exports.add_bill = (req, res, next) => {
             });
         }
 
-        //Send notification email 
+        //Send notification email  
         const transporter = nodemailer.createTransport({
             service: 'smtp',
             host: process.env.SMTP_SERVER,
