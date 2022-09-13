@@ -85,22 +85,21 @@ exports.get_my_bills = (req, res, next) => {
 
 exports.get_a_bill_by_unique_url_param =  (req, res, next) => {
     try{
-    Bill.findOne({unique_url_param : req.params.url_unique_param},(err, data) => {
-        if(err || !data){
+    Bill.findOne({unique_url_param : req.params.url_unique_param},(err, bill) => {
+        if(err || !bill){
             return res.status(400).json({
                 error : "Unable to get bill",
                 id : req.params.url_unique_param
             });
         }
         //Get user 
-        User.findOne({id : data.user_id}, (err, user) => {
+        User.findOne({id : bill.user_id}, (err, user) => {
             if(err || !user){
                 return res.status(400).json({
                     error : "Unable to get user"
                 });
             }
-            data.user = user;
-            res.json(data);
+            res.json({bill,user});
         });
     });
     }catch(e){
