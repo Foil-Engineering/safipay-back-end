@@ -83,6 +83,7 @@ exports.get_my_bills = (req, res, next) => {
 };
 
 exports.get_a_bill_by_unique_url_param =  (req, res, next) => {
+    try{
     Bill.findOne({unique_url_param : req.params.url_unique_param},(err, data) => {
         if(err || !data){
             return res.status(400).json({
@@ -101,6 +102,9 @@ exports.get_a_bill_by_unique_url_param =  (req, res, next) => {
             res.json(data);
         });
     });
+    }catch(e){
+        console.log(e);
+    }
 }
 
 exports.update_a_bill_paid = (req, res, next) => {
