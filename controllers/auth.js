@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const { expressjwt } = require("express-jwt");
 const User = require("../models/User");
+const {sendMail} = require("../utils/email");
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ exports.login = async (req, res, next) => {
         res.cookie("t",token,{expire : new Date() + 9999});
 
         const {_id, names, email, kyc_info} = user;
+
+        sendMail(email, "Login", "You have logged in successfully", "You have logged in successfully<br/>If that was not you, please change your password or contact us immediately.");
         
         return res.status(200).json({
             token : token,
@@ -43,6 +46,7 @@ exports.signup = async (req, res, next) => {
     const token = jwt.sign({id : user._id},process.env.JWT_SECRET);    
     res.cookie("t",token,{expire : new Date() + 9999});
     const {_id, names, email} = user;
+    sendMail(email, "Signup", "You have signed up successfully", "You have signed up successfully<br/>If that was not you, please change your password or contact us immediately.");
     return res.status(200).json({
         token : token,
         user : {_id, email, names}

@@ -1,12 +1,13 @@
 const Bill = require("../models/Bill");
 const User = require("../models/User");
 const uuid = require("uuid");
-const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
+const {sendEmail} = require("../utils/email");
 
 dotenv.config();
 
 exports.add_bill = (req, res, next) => {
+    console.log(req.auth);
     req.auth.hashed_password = undefined;
     req.auth.salt = undefined;
     req.body.user_id = req.auth.id;
@@ -19,53 +20,31 @@ exports.add_bill = (req, res, next) => {
             });
         }
 
-        //Send notification email  
-        const transporter = nodemailer.createTransport({
-            service: 'smtp',
-            host: process.env.SMTP_SERVER,
-            port: process.env.SMTP_PORT,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_ADDR,
-                pass: process.env.EMAIL_PASSWORD
+        //Get user 
+        User.findOne({id : req.auth.id}, (err, user) => {
+            if(err || !user){
+                return res.status(400).json({
+                    error : "User not found"
+                });
             }
+            
+
+            const title = data.title;
+            const description = data.description;
+
+            let subject = 'You have a new invoice';
+            let text = `A new invoice was sent to you.\n ${title}\n${invoice_unique_url}`;
+            const invoice_unique_url = `${process.env.APP_URL}/invoice_id=${data.unique_url_param}`;
+            let body = `<h1>${title}</h1><body><a style='padding:10px;background:#03a9f4;color:white;border-radius:10px;text-decoration:none;' href='{invoice_unique_url}'>View the invoice</a><p>If you can't click on the previous link, copy this URL <b>${invoice_unique_url}</b></p></body>`;
+            sendEmail(req.body.email_to, 'You have a new bill', text, body);
+            
+            subject = 'Your bill was added';
+            text = 'Your bill has been added successfully';
+            body = `<h1>${title}</h1><p>${description}</p><p>Invoice URL: <a href='{invoice_unique_url}'>${invoice_unique_url}</a></p>`;
+            sendEmail(user.email, 'You have a new bill', text, body);
+            
+            res.json(data);
         });
-
-        const mailOptions = {
-            from: process.env.EMAIL_ADDR,
-            to: req.auth.email,
-            subject: 'Bill added',
-            text: 'Your bill has been added successfully',
-            html: '<h1>Your bill has been added successfully</h1>'
-        };
-
-        const mailOptionsDest = {
-            from: process.env.EMAIL_ADDR,
-            to: req.body.email_to,
-            subject: 'You have a new bill',
-            text: 'Your bill has been added successfully',
-            html: '<h1>Your bill has been added successfully</h1>'
-        };
-
-        
-
-        transporter.sendMail(mailOptionsDest, function(error, info){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
-
-        res.json(data);
     });
 };
 
