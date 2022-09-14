@@ -24,11 +24,11 @@ exports.login = async (req, res, next) => {
         
         res.cookie("t",token,{expire : new Date() + 9999});
 
-        const {_id, names, email} = user;
+        const {_id, names, email, kyc_info} = user;
         
         return res.status(200).json({
             token : token,
-            user : {_id, email, names}
+            user
         });
     });
 };
