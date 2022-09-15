@@ -32,10 +32,11 @@ exports.add_bill = (req, res, next) => {
 
                 const title = data.title;
                 const description = data.description;
+                const invoice_unique_url = `${process.env.APP_URL}/new-invoice?invoice_id=${data.unique_url_param}`;
 
                 let subject = 'You have a new invoice';
                 let text = `A new invoice was sent to you.\n ${title}\n${invoice_unique_url}`;
-                const invoice_unique_url = `${process.env.APP_URL}/new-invoice?invoice_id=${data.unique_url_param}`;
+                
                 let body = `<h1>${title}</h1><body><a style='padding:10px;background:#03a9f4;color:white;border-radius:10px;text-decoration:none;' href='{invoice_unique_url}'>View the invoice</a><p>If you can't click on the previous link, copy this URL <b>${invoice_unique_url}</b></p></body>`;
                 sendEmail(req.body.email_to, 'You have a new bill', text, body);
                 
